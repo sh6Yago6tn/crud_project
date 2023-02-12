@@ -30,4 +30,11 @@ public class UserModel {
     @Column(name = "password", unique = true)
     private String password;
 
+    public UserModel(){}
+    public UserModel(UUID id, String username, String password){
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
 }
