@@ -36,6 +36,12 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/findByUsername/{username}")
+    public ResponseEntity<UserModel> getByUsername(@PathVariable String username){
+        UserModel obj = this.userService.findByUsername(username);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @PostMapping
     @Validated(CreateUser.class)
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserModel obj){

@@ -4,9 +4,13 @@ import com.crudproject.crud.models.UserModel;
 import com.crudproject.crud.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 @Service
@@ -25,7 +29,13 @@ public class UserService {
 
     public UserModel findById(UUID id) {
         Optional<UserModel> user = this.userRepository.findById(id);
-        return user.orElseThrow(() -> new RuntimeException("User not found!"));
+        return user.orElseThrow(() -> new NoSuchElementException("User not found!"));
+    }
+
+
+    public UserModel findByUsername(String username){
+        Optional<UserModel> user = this.userRepository.findByUsername(username);
+        return user.orElseThrow(() -> new NoSuchElementException("User not found!"));
     }
 
     @Transactional
@@ -48,7 +58,7 @@ public class UserService {
         try {
             this.userRepository.deleteById(id);
         }catch (EmptyResultDataAccessException e){
-            throw new IllegalArgumentException("Invalid operation, this id have entities related! id-" + id);
+            throw new DataIntegrityViolationException("Invalid operation, this id have entities related! id-" + id);
         }
     }
 

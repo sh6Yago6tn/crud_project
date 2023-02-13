@@ -1,5 +1,6 @@
 package com.crudproject.crud.models;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -37,4 +38,23 @@ public class UserModel {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserModel userModel = (UserModel) o;
+
+        if (!Objects.equals(id, userModel.id)) return false;
+        if (!Objects.equals(username, userModel.username)) return false;
+        return Objects.equals(password, userModel.password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        return result;
+    }
 }
