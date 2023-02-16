@@ -20,31 +20,31 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<UserModel>> getAllUsers(){
+    public ResponseEntity<Iterable<UserModel>> getAllUsers() {
         Iterable<UserModel> users = userService.findAllUser();
         return ResponseEntity.ok().body(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserModel> getById(@PathVariable UUID id){
+    public ResponseEntity<UserModel> getById(@PathVariable UUID id) {
         UserModel obj = this.userService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @GetMapping("/findByUsername/{username}")
-    public ResponseEntity<UserModel> getByUsername(@PathVariable String username){
+    public ResponseEntity<UserModel> getByUsername(@PathVariable String username) {
         UserModel obj = this.userService.findByUsername(username);
         return ResponseEntity.ok().body(obj);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @Validated(CreateUser.class)
-    public ResponseEntity<Void> createUser(@Valid @RequestBody UserModel obj){
+    public ResponseEntity<Void> createUser(@Valid @RequestBody UserModel obj) {
         this.userService.createUser(obj);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -55,17 +55,16 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Validated(UpdateUser.class)
-    public ResponseEntity<Void> updateUser(@Valid @RequestBody UserModel obj, UUID id){
+    public ResponseEntity<Void> updateUser(@Valid @RequestBody UserModel obj, UUID id) {
         obj.setId(id);
         this.userService.updateUser(obj);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID id){
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         this.userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }
