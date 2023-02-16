@@ -6,15 +6,18 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 @Service
 public class UserService {
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final UserRepository userRepository;
 
@@ -41,6 +44,7 @@ public class UserService {
     @Transactional
     public UserModel createUser(UserModel obj){
         obj.setId(null);
+        obj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
         obj = this.userRepository.save(obj);
         return obj;
     }
@@ -49,6 +53,7 @@ public class UserService {
     public UserModel updateUser(UserModel obj){
         UserModel newObj = findById(obj.getId());
         newObj.setPassword(obj.getPassword());
+        newObj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
         this.userRepository.save(newObj);
         return newObj;
     }

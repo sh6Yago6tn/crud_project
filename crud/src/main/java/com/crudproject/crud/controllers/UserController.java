@@ -5,7 +5,9 @@ import com.crudproject.crud.interfaces.UpdateUser;
 import com.crudproject.crud.models.UserModel;
 import com.crudproject.crud.services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 @Validated
 public class UserController {
+    @Autowired
     private final UserService userService;
 
     public UserController(UserService userService) {
